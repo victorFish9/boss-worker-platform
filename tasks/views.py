@@ -10,14 +10,21 @@ SCOPES = ['https://www.googleapis.com/auth/drive']
 PARENT_FOLDER_ID = "11T7jAQ_Hup5lG9oxvcWydXo3GMJpVqqR"
 
 
+import os
+import json
+
 def authenticate():
     service_json_str = os.getenv("SERVICE_JSON")
     if not service_json_str:
         raise FileNotFoundError("SERVICE_JSON not found in environment variables")
 
+
+    service_json_str = service_json_str.replace("\\n", "\n")
     service_json = json.loads(service_json_str)
+
     creds = service_account.Credentials.from_service_account_info(service_json, scopes=SCOPES)
     return creds
+
 
 
 def upload_large_file_to_drive(file_path, file_name):
