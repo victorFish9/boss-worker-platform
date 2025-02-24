@@ -149,19 +149,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 import os
+import json
 
-"""# Настройки MinIO (S3-совместимое хранилище)
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+GOOGLE_CREDENTIALS = json.loads(os.getenv("GOOGLE_CREDENTIALS", "{}"))
 
-AWS_ACCESS_KEY_ID = os.getenv("MINIO_ACCESS_KEY", "access_key")
-AWS_SECRET_ACCESS_KEY = os.getenv("MINIO_SECRET_KEY", "secret_key")
-AWS_STORAGE_BUCKET_NAME = "bossworker"
-AWS_S3_ENDPOINT_URL = "http://localhost:9000"  # Заменить на адрес MinIO
-AWS_S3_CUSTOM_DOMAIN = f"{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}"
-
-# Если нужны публичные файлы, можно включить:
-AWS_S3_FILE_OVERWRITE = False
-AWS_QUERYSTRING_AUTH = False  # Отключает подписи URL (делает файлы публичными)"""
+with open("service.json", "w") as f:
+    json.dump(GOOGLE_CREDENTIALS, f)
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 3 * 1024 * 1024 * 1024
 
