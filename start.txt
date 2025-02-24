@@ -1,0 +1,12 @@
+Database:
+psql -h localhost -p 5432 -U $(whoami) -d boss_worker_db
+
+Docker:
+docker start minio
+docker stop minio
+
+Django shell:
+python manage.py shell
+
+
+pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
