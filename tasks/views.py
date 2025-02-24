@@ -1,23 +1,22 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from googleapiclient.discovery import build
-from google.oauth2 import service_account
 from googleapiclient.http import MediaFileUpload
-import os
 import json
+import os
+from google.oauth2 import service_account
 
 SCOPES = ['https://www.googleapis.com/auth/drive']
 PARENT_FOLDER_ID = "11T7jAQ_Hup5lG9oxvcWydXo3GMJpVqqR"
 
 
-import os
-import json
+SCOPES = ['https://www.googleapis.com/auth/drive']
+SERVICE_JSON = os.getenv("SERVICE_JSON")  # Загружаем JSON из переменных среды
 
 def authenticate():
-    service_json_str = os.getenv("SERVICE_JSON")
-    if not service_json_str:
-        raise FileNotFoundError("SERVICE_JSON not found in environment variables")
-
+    creds_dict = json.loads(SERVICE_JSON)  # Декодируем JSON
+    creds = service_account.Credentials.from_service_account_info(creds_dict, scopes=SCOPES)
+    return creds
 
     service_json_str = service_json_str.replace("\\n", "\n")
     service_json = json.loads(service_json_str)
