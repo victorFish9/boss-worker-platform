@@ -157,4 +157,5 @@ with open("service.json", "w") as f:
     json.dump(GOOGLE_CREDENTIALS, f)
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 3 * 1024 * 1024 * 1024
+FILE_UPLOAD_MAX_MEMORY_SIZE = 3 * 1024 * 1024 * 1024
 
