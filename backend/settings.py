@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-i+=8k_p!re-0e73a%bb1%s5ou#3=ep%co-vpht7aii0jup4$k*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["boss-worker-platform.onrender.com"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+#ALLOWED_HOSTS = ["boss-worker-platform.onrender.com"]
 
 
 
@@ -41,11 +42,14 @@ INSTALLED_APPS = [
 
 
     'rest_framework',
+    'rest_framework_simplejwt',
     'corsheaders',
     'storages',
     'drf_spectacular',
 
     'tasks',
+    'storage',
+    'authentication',
 ]
 
 MIDDLEWARE = [
@@ -59,10 +63,20 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+]
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 REST_FRAMEWORK = {
 'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+"DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+"DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",  # По умолчанию требует аутентификацию
+    ),
 }
 
 SPECTACULAR_SETTINGS = {
@@ -99,9 +113,13 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 ##
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'boss_worker_db',  # Имя твоей базы
+        'USER': 'admin',  # Или $(whoami), если ты используешь свой системный юзер
+        'PASSWORD': '',  # Если у пользователя нет пароля, оставь пустым
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -158,4 +176,24 @@ with open("service.json", "w") as f:
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 3 * 1024 * 1024 * 1024
 FILE_UPLOAD_MAX_MEMORY_SIZE = 3 * 1024 * 1024 * 1024
+
+
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+AWS_ACCESS_KEY_ID = "minioadmin"
+AWS_SECRET_ACCESS_KEY = "minioadmin"
+AWS_STORAGE_BUCKET_NAME = "boss-worker-bucket"
+
+AWS_S3_ADDRESSING_STYLE = "path"
+AWS_S3_ENDPOINT_URL = "http://minio-railway.internal:9000"
+
+# MinIO settings
+MINIO_STORAGE = {
+    "ENDPOINT_URL": "http://16.16.66.55:9000",
+    "ACCESS_KEY": "minioadmin",
+    "SECRET_KEY": "minioadmin",
+    "BUCKET_NAME": "boss-worker-bucket",
+}
+
+
 
