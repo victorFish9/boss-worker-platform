@@ -1,6 +1,9 @@
 Database:
 psql -h localhost -p 5432 -U $(whoami) -d boss_worker_db
 
+python manage.py createsuperuser -> (venv)
+
+
 Docker:
 docker start minio
 docker stop minio
@@ -10,3 +13,36 @@ python manage.py shell
 
 
 pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
+
+
+Registery:
+curl -X POST http://127.0.0.1:8000/api/auth/register/ \
+     -H "Content-Type: application/json" \
+     -d '{"username": "new_user", "password": "newpassword", "email": "new_user@example.com"}'
+Login:
+curl -X POST http://127.0.0.1:8000/api/auth/login/ \
+     -H "Content-Type: application/json" \
+     -d '{"username": "name", "password": "pw"}'
+
+GET with token:
+curl -X GET http://127.0.0.1:8000/storage/storage/ \
+     -H "Authorization: Bearer your_access_token_here"
+
+
+
+
+
+
+"""
+    async def get_presigned_url(self, object_name):
+        async with self.session.create_client("s3", **self.config) as client:
+            try:
+                url = await client.generate_presigned_url(
+                    "get_object",
+                    Params={"Bucket": self.bucket_name, "Key": object_name},
+                    ExpiresIn=3600,  # Время жизни ссылки (в секундах)
+                )
+                return url
+            except ClientError as e:
+                print(f"Ошибка: {e}")
+                return None"""

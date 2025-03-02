@@ -4,7 +4,16 @@ from django.views import View
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+
 from .s3_client import MinIOClient
+
+
+
+from rest_framework.permissions import IsAuthenticated
+
+from .s3_client import MinIOClient
+
+
 
 
 class UploadFileView(View):
@@ -60,6 +69,9 @@ class GetFileLinkView(View):
         return JsonResponse({"url": url})
 
 class StorageAPIView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         client = MinIOClient()
         loop = asyncio.new_event_loop()

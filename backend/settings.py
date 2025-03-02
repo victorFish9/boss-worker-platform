@@ -42,12 +42,16 @@ INSTALLED_APPS = [
 
 
     'rest_framework',
+    'rest_framework_simplejwt',
     'corsheaders',
     'storages',
     'drf_spectacular',
 
     'tasks',
     'storage',
+
+    'authentication',
+
 ]
 
 MIDDLEWARE = [
@@ -61,10 +65,20 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+]
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 REST_FRAMEWORK = {
 'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+"DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+"DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",  # По умолчанию требует аутентификацию
+    ),
 }
 
 SPECTACULAR_SETTINGS = {
@@ -101,9 +115,13 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 ##
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'boss_worker_db',  # Имя твоей базы
+        'USER': 'admin',  # Или $(whoami), если ты используешь свой системный юзер
+        'PASSWORD': '',  # Если у пользователя нет пароля, оставь пустым
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 

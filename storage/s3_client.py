@@ -1,4 +1,4 @@
-import asyncio
+
 from contextlib import asynccontextmanager
 from aiobotocore.session import get_session
 from botocore.exceptions import ClientError
@@ -42,9 +42,13 @@ class MinIOClient:
             except ClientError as e:
                 return f"Ошибка: {e}"
 
+
+
+
     async def get_presigned_url(self, object_name):
         """ Генерация ссылки на скачивание файла """
-        async with self.session.create_client("s3", **self.config) as client:
+        async with self.get_client() as client:
+
             try:
                 url = await client.generate_presigned_url(
                     "get_object",
@@ -55,3 +59,23 @@ class MinIOClient:
             except ClientError as e:
                 print(f"Ошибка: {e}")
                 return None
+
+
+    async def get_object_metadata(self, object_name):
+        """ Получение метаданных файла (размер, владелец, дата загрузки) """
+        async with self.get_client() as client:
+            try:
+                response = await client.head_object(
+                    Bucket=self.bucket_name, Key=object_name
+                )
+                metadata = {
+                    "Size": response.get("ContentLength"),
+                    "LastModified": response.get("LastModified"),
+                    "Owner": response.get("Owner", {}).get("DisplayName"),
+                    "ETag": response.get("ETag"),
+                    "Metadata": response.get("Metadata", {}),
+                }
+                return metadata
+            except ClientError as e:
+                return f"Ошибка: {e}"
+
