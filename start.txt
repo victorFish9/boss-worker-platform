@@ -24,6 +24,10 @@ curl -X POST http://127.0.0.1:8000/api/auth/login/ \
      -H "Content-Type: application/json" \
      -d '{"username": "name", "password": "pw"}'
 
+curl -X POST https://boss-worker-platform.onrender.com/api/auth/login/ \
+-H "Content-Type: application/json" \
+-d '{"username": "name", "password": "pw"}'
+
 GET with token:
 curl -X GET http://127.0.0.1:8000/storage/storage/ \
      -H "Authorization: Bearer your_access_token_here"
