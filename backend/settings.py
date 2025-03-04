@@ -73,6 +73,14 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
 
+
+
+CORS_ALLOWED_ORIGINS = [
+    "https://boss-worker-frontend-bo34.vercel.app",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 REST_FRAMEWORK = {
@@ -193,7 +201,7 @@ GOOGLE_CREDENTIALS = json.loads(os.getenv("GOOGLE_CREDENTIALS", "{}"))
 with open("service.json", "w") as f:
     json.dump(GOOGLE_CREDENTIALS, f)
 
-DATA_UPLOAD_MAX_MEMORY_SIZE = 3 * 1024 * 1024 * 1024
+DATA_UPLOAD_MAX_MEMORY_SIZE = 500 * 1024 * 1024
 FILE_UPLOAD_MAX_MEMORY_SIZE = 3 * 1024 * 1024 * 1024
 
 
