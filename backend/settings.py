@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 
+import os
+import json
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -115,15 +118,28 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 
 ##
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+ #       'NAME': 'boss_worker_db',  # Имя твоей базы
+  #      'USER': 'admin',  # Или $(whoami), если ты используешь свой системный юзер
+   #     'PASSWORD': '',  # Если у пользователя нет пароля, оставь пустым
+    #    'HOST': 'localhost',
+     #   'PORT': '5432',
+    #}
+#}
+
+
+import dj_database_url
+
+
+DATABASE_URL = os.getenv("DATABASE_URL")  # Правильное получение переменной
+
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL is not set. Check your environment variables.")
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'boss_worker_db',  # Имя твоей базы
-        'USER': 'admin',  # Или $(whoami), если ты используешь свой системный юзер
-        'PASSWORD': '',  # Если у пользователя нет пароля, оставь пустым
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600, ssl_require=True)
 }
 
 
@@ -169,8 +185,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-import os
-import json
+
+
 
 GOOGLE_CREDENTIALS = json.loads(os.getenv("GOOGLE_CREDENTIALS", "{}"))
 
