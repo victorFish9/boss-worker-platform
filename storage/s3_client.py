@@ -1,4 +1,4 @@
-
+import io
 from contextlib import asynccontextmanager
 from aiobotocore.session import get_session
 from botocore.exceptions import ClientError
@@ -20,17 +20,15 @@ class MinIOClient:
         async with self.session.create_client("s3", **self.config) as client:
             yield client
 
-    async def upload_file(self, file_path: str):
-        object_name = file_path.split("/")[-1]
+    async def upload_file(self, file_name: str, file_data: bytes):
         async with self.get_client() as client:
             try:
-                with open(file_path, "rb") as file:
-                    await client.put_object(
-                        Bucket=self.bucket_name,
-                        Key=object_name,
-                        Body=file,
-                    )
-                return f"Файл {object_name} успешно загружен"
+                await client.put_object(
+                    Bucket=self.bucket_name,
+                    Key=file_name,
+                    Body=io.BytesIO(file_data),
+                )
+                return f"Файл {file_name} успешно загружен"
             except ClientError as e:
                 return f"Ошибка: {e}"
 

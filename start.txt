@@ -29,6 +29,20 @@ curl -X GET http://127.0.0.1:8000/storage/storage/ \
      -H "Authorization: Bearer your_access_token_here"
 
 
+POST with token
+curl -X POST http://127.0.0.1:8000/storage/upload/ \
+     -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+     -H "Content-Type: multipart/form-data" \
+     -F "file=@/path/to/your/file.txt"
+
+
+     curl -X POST http://127.0.0.1:8000/storage/upload/ \
+     -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQwOTgzODk5LCJpYXQiOjE3NDA5ODM1OTksImp0aSI6IjBjN2Q3MjFmYWE0NTQxYTM5NDMwMmY3MjBmZWM5MjAyIiwidXNlcl9pZCI6Mn0.n5cRLSYtiowH3o2Ru1YDk5si9xmqgUGXIyM9jAoDEeY" \
+     -H "Content-Type: multipart/form-data" \
+     -F "file=@/Users/admin/Desktop/books.txt"
+
+
+
 
 
 

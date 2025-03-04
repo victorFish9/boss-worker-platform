@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -197,5 +198,10 @@ MINIO_STORAGE = {
     "BUCKET_NAME": "boss-worker-bucket",
 }
 
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),  # Время жизни access-токена
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),  # Время жизни refresh-токена
+}
 
 
