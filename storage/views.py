@@ -133,3 +133,19 @@ class StorageAPIView(APIView):
 
 
         return Response({"files": file_data}, status=status.HTTP_200_OK)
+
+class GetPresignedUploadURLAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        client = MinIOClient()
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        unique_id = uuid.uuid4().hex[:8]
+        zip_filename = f"upload_{timestamp}_{unique_id}.zip"
+
+        presigned_url = loop.run_until_complete(client.get_presigned_upload_url(zip_filename))
+
+        return Response({"upload_url": presigned_url, "filename": zip_filename}, status=status.HTTP_200_OK)
