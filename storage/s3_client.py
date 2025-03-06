@@ -2,7 +2,10 @@ import io
 from contextlib import asynccontextmanager
 from aiobotocore.session import get_session
 from botocore.exceptions import ClientError
+from botocore.config import Config
 from django.conf import settings
+from minio.error import S3Error
+from datetime import timedelta
 
 
 class MinIOClient:
@@ -11,6 +14,7 @@ class MinIOClient:
             "aws_access_key_id": settings.MINIO_STORAGE["ACCESS_KEY"],
             "aws_secret_access_key": settings.MINIO_STORAGE["SECRET_KEY"],
             "endpoint_url": settings.MINIO_STORAGE["ENDPOINT_URL"],
+            "config": Config(signature_version="s3v4"),
         }
         self.bucket_name = settings.MINIO_STORAGE["BUCKET_NAME"]
         self.session = get_session()
@@ -76,4 +80,17 @@ class MinIOClient:
                 return metadata
             except ClientError as e:
                 return f"Ошибка: {e}"
+
+    async def get_presigned_upload_url(self, filename):
+        """Генерирует presigned URL для загрузки файла в MinIO"""
+        async with self.get_client() as client:
+            try:
+                url = await client.generate_presigned_url(
+                    "put_object",
+                    Params={"Bucket": self.bucket_name, "Key": filename},
+                    ExpiresIn=3600,  # Время жизни ссылки (в секундах)
+                )
+                return url
+            except ClientError as e:
+                return f"Ошибка MinIO: {str(e)}"
 
