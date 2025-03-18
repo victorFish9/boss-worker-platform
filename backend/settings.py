@@ -216,7 +216,7 @@ AWS_S3_ENDPOINT_URL = "http://minio-railway.internal:9000"
 
 # MinIO settings
 MINIO_STORAGE = {
-    "ENDPOINT_URL": "http://16.16.66.55:9000",
+    "ENDPOINT_URL": "https://minio-railway-production.up.railway.app/",
     "ACCESS_KEY": "minioadmin",
     "SECRET_KEY": "minioadmin",
     "BUCKET_NAME": "boss-worker-bucket",

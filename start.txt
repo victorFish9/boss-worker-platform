@@ -32,6 +32,9 @@ GET with token:
 curl -X GET https://boss-worker-platform.onrender.com/storage/storage/ \
      -H "Authorization: Bearer your_access_token_here"
 
+     curl -X GET http://127.0.0.1:8000/storage/storage/ \
+     -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyMzIyOTk5LCJpYXQiOjE3NDIzMTkzOTksImp0aSI6ImRhYTBmNzliNjZjNTQyYWM5ZTgyNjdlNTUzOGZjMjcxIiwidXNlcl9pZCI6MX0.r3AY9aeZoHJ19mqG1OEYGPyNgNj6XYHXB8RlBDRz16s"
+
 
 POST with token
 curl -X POST http://127.0.0.1:8000/storage/upload/ \
